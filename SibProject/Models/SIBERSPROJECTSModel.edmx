@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище SIBERSPROJECTSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EMPLOYEE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SurName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Patronymic" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FILE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_PROJECT" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PROJECT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Customer" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Executor" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProjectLeader" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PROJECT_EMPLOYEE">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="STATUS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TASK">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Author" Type="int" Nullable="false" />
+          <Property Name="Executor" Type="int" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="text" />
+        </EntityType>
+        <Association Name="FK_FILE_PROJECT">
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="1" />
+          <End Role="FILE" Type="Self.FILE" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FILE">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROJECT_EMPLOYEE">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="0..1" />
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PROJECT">
+              <PropertyRef Name="ProjectLeader" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROJECT_EMPLOYEE_EMPLOYEE">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PROJECT_EMPLOYEE" Type="Self.PROJECT_EMPLOYEE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PROJECT_EMPLOYEE">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PROJECT_EMPLOYEE_PROJECT">
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PROJECT_EMPLOYEE" Type="Self.PROJECT_EMPLOYEE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PROJECT_EMPLOYEE">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_EMPLOYEE">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="1" />
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="Author" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_EMPLOYEE1">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="0..1" />
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="Executor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_PROJECT">
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_STATUS">
+          <End Role="STATUS" Type="Self.STATUS" Multiplicity="1" />
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STATUS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище SIBERSPROJECTSModelContainer">
+          <EntitySet Name="EMPLOYEE" EntityType="Self.EMPLOYEE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FILE" EntityType="Self.FILE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROJECT" EntityType="Self.PROJECT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROJECT_EMPLOYEE" EntityType="Self.PROJECT_EMPLOYEE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STATUS" EntityType="Self.STATUS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TASK" EntityType="Self.TASK" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FILE_PROJECT" Association="Self.FK_FILE_PROJECT">
+            <End Role="PROJECT" EntitySet="PROJECT" />
+            <End Role="FILE" EntitySet="FILE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROJECT_EMPLOYEE" Association="Self.FK_PROJECT_EMPLOYEE">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="PROJECT" EntitySet="PROJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROJECT_EMPLOYEE_EMPLOYEE" Association="Self.FK_PROJECT_EMPLOYEE_EMPLOYEE">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="PROJECT_EMPLOYEE" EntitySet="PROJECT_EMPLOYEE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PROJECT_EMPLOYEE_PROJECT" Association="Self.FK_PROJECT_EMPLOYEE_PROJECT">
+            <End Role="PROJECT" EntitySet="PROJECT" />
+            <End Role="PROJECT_EMPLOYEE" EntitySet="PROJECT_EMPLOYEE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_EMPLOYEE" Association="Self.FK_TASK_EMPLOYEE">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_EMPLOYEE1" Association="Self.FK_TASK_EMPLOYEE1">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_PROJECT" Association="Self.FK_TASK_PROJECT">
+            <End Role="PROJECT" EntitySet="PROJECT" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_STATUS" Association="Self.FK_TASK_STATUS">
+            <End Role="STATUS" EntitySet="STATUS" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SIBERSPROJECTSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EMPLOYEE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SurName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsActive" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PROJECT" Relationship="Self.FK_PROJECT_EMPLOYEE" FromRole="EMPLOYEE" ToRole="PROJECT" />
+          <NavigationProperty Name="TASK" Relationship="Self.FK_TASK_EMPLOYEE" FromRole="EMPLOYEE" ToRole="TASK" />
+          <NavigationProperty Name="TASK1" Relationship="Self.FK_TASK_EMPLOYEE1" FromRole="EMPLOYEE" ToRole="TASK" />
+          <NavigationProperty Name="PROJECT1" Relationship="Self.PROJECT_EMPLOYEE" FromRole="EMPLOYEE" ToRole="PROJECT" />
+        </EntityType>
+        <EntityType Name="FILE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_PROJECT" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PROJECT" Relationship="Self.FK_FILE_PROJECT" FromRole="FILE" ToRole="PROJECT" />
+        </EntityType>
+        <EntityType Name="PROJECT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Customer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Executor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProjectLeader" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EMPLOYEE" Relationship="Self.FK_PROJECT_EMPLOYEE" FromRole="PROJECT" ToRole="EMPLOYEE" />
+          <NavigationProperty Name="FILE" Relationship="Self.FK_FILE_PROJECT" FromRole="PROJECT" ToRole="FILE" />
+          <NavigationProperty Name="TASK" Relationship="Self.FK_TASK_PROJECT" FromRole="PROJECT" ToRole="TASK" />
+          <NavigationProperty Name="EMPLOYEE1" Relationship="Self.PROJECT_EMPLOYEE" FromRole="PROJECT" ToRole="EMPLOYEE" />
+        </EntityType>
+        <EntityType Name="STATUS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TASK" Relationship="Self.FK_TASK_STATUS" FromRole="STATUS" ToRole="TASK" />
+        </EntityType>
+        <EntityType Name="TASK">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Author" Type="Int32" Nullable="false" />
+          <Property Name="Executor" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EMPLOYEE" Relationship="Self.FK_TASK_EMPLOYEE" FromRole="TASK" ToRole="EMPLOYEE" />
+          <NavigationProperty Name="EMPLOYEE1" Relationship="Self.FK_TASK_EMPLOYEE1" FromRole="TASK" ToRole="EMPLOYEE" />
+          <NavigationProperty Name="PROJECT" Relationship="Self.FK_TASK_PROJECT" FromRole="TASK" ToRole="PROJECT" />
+          <NavigationProperty Name="STATUS" Relationship="Self.FK_TASK_STATUS" FromRole="TASK" ToRole="STATUS" />
+        </EntityType>
+        <Association Name="FK_PROJECT_EMPLOYEE">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="0..1" />
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PROJECT">
+              <PropertyRef Name="ProjectLeader" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_EMPLOYEE">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="1" />
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="Author" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_EMPLOYEE1">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="0..1" />
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EMPLOYEE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="Executor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FILE_PROJECT">
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="1" />
+          <End Role="FILE" Type="Self.FILE" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FILE">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_PROJECT">
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TASK_STATUS">
+          <End Role="STATUS" Type="Self.STATUS" Multiplicity="1" />
+          <End Role="TASK" Type="Self.TASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STATUS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TASK">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PROJECT_EMPLOYEE">
+          <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="*" />
+          <End Role="PROJECT" Type="Self.PROJECT" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SIBERSPROJECTSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EMPLOYEE" EntityType="Self.EMPLOYEE" />
+          <EntitySet Name="FILE" EntityType="Self.FILE" />
+          <EntitySet Name="PROJECT" EntityType="Self.PROJECT" />
+          <EntitySet Name="STATUS" EntityType="Self.STATUS" />
+          <EntitySet Name="TASK" EntityType="Self.TASK" />
+          <AssociationSet Name="FK_PROJECT_EMPLOYEE" Association="Self.FK_PROJECT_EMPLOYEE">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="PROJECT" EntitySet="PROJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_EMPLOYEE" Association="Self.FK_TASK_EMPLOYEE">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_EMPLOYEE1" Association="Self.FK_TASK_EMPLOYEE1">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FILE_PROJECT" Association="Self.FK_FILE_PROJECT">
+            <End Role="PROJECT" EntitySet="PROJECT" />
+            <End Role="FILE" EntitySet="FILE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_PROJECT" Association="Self.FK_TASK_PROJECT">
+            <End Role="PROJECT" EntitySet="PROJECT" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TASK_STATUS" Association="Self.FK_TASK_STATUS">
+            <End Role="STATUS" EntitySet="STATUS" />
+            <End Role="TASK" EntitySet="TASK" />
+          </AssociationSet>
+          <AssociationSet Name="PROJECT_EMPLOYEE" Association="Self.PROJECT_EMPLOYEE">
+            <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+            <End Role="PROJECT" EntitySet="PROJECT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище SIBERSPROJECTSModelContainer" CdmEntityContainer="SIBERSPROJECTSEntities">
+          <EntitySetMapping Name="EMPLOYEE">
+            <EntityTypeMapping TypeName="SIBERSPROJECTSModel.EMPLOYEE">
+              <MappingFragment StoreEntitySet="EMPLOYEE">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="SurName" ColumnName="SurName" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FILE">
+            <EntityTypeMapping TypeName="SIBERSPROJECTSModel.FILE">
+              <MappingFragment StoreEntitySet="FILE">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ID_PROJECT" ColumnName="ID_PROJECT" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROJECT">
+            <EntityTypeMapping TypeName="SIBERSPROJECTSModel.PROJECT">
+              <MappingFragment StoreEntitySet="PROJECT">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="Executor" ColumnName="Executor" />
+                <ScalarProperty Name="ProjectLeader" ColumnName="ProjectLeader" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STATUS">
+            <EntityTypeMapping TypeName="SIBERSPROJECTSModel.STATUS">
+              <MappingFragment StoreEntitySet="STATUS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TASK">
+            <EntityTypeMapping TypeName="SIBERSPROJECTSModel.TASK">
+              <MappingFragment StoreEntitySet="TASK">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Executor" ColumnName="Executor" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PROJECT_EMPLOYEE" TypeName="SIBERSPROJECTSModel.PROJECT_EMPLOYEE" StoreEntitySet="PROJECT_EMPLOYEE">
+            <EndProperty Name="EMPLOYEE">
+              <ScalarProperty Name="ID" ColumnName="EmployeeID" />
+            </EndProperty>
+            <EndProperty Name="PROJECT">
+              <ScalarProperty Name="ID" ColumnName="ProjectID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

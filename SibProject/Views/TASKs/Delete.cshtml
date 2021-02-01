@@ -1,0 +1,79 @@
+﻿@model SibProject.Models.TASK
+
+@{
+    ViewBag.Title = "Удалить задачу";
+}
+
+<h2>Удалить задачу</h2>
+
+<h3>Подтвердите удаление</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Задача
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            Приоритет
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Priority)
+        </dd>
+
+        <dt>
+            Комментарий
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+
+        <dt>
+            Автор
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EMPLOYEE.SurName)&nbsp;@Html.DisplayFor(model => model.EMPLOYEE.FirstName)
+        </dd>
+
+        <dt>
+            Исполнитель
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EMPLOYEE1.SurName)&nbsp;@Html.DisplayFor(model => model.EMPLOYEE1.FirstName)
+        </dd>
+
+        <dt>
+            Проект
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PROJECT.Name)
+        </dd>
+
+        <dt>
+            Статус
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.STATUS.Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Назад", "Index")
+        </div>
+    }
+</div>

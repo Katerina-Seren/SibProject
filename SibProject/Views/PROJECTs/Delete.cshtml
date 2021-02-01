@@ -1,0 +1,86 @@
+﻿@model SibProject.Models.PROJECT
+
+@{
+    ViewBag.Title = "Удалить";
+}
+
+
+<h3>Подтвердите удаление данного проекта</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt style="width:180px;">
+            Название
+        </dt>
+
+        <dd>
+            &nbsp; @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt style="width:180px;">
+            Компания-заказчик
+        </dt>
+
+        <dd>
+            &nbsp; @Html.DisplayFor(model => model.Customer)
+        </dd>
+
+        <dt style="width:180px;">
+            Компания-исполнитель
+        </dt>
+
+        <dd>
+            &nbsp; @Html.DisplayFor(model => model.Executor)
+        </dd>
+
+        <dt style="width:180px;">
+            Дата начала
+        </dt>
+
+        <dd>
+            &nbsp; @*форматируем дату:*@
+            @{ string Date = ""; }
+            @{ if (Model.StartDate != null)
+                { Date = Convert.ToDateTime(Model.StartDate).ToString("d"); }
+                else { Date = ""; } }
+            @Date
+        </dd>
+
+        <dt style="width:180px;">
+            Дата окончания
+        </dt>
+
+        <dd>
+            &nbsp; @*форматируем дату:*@
+            @{ if (Model.ExpirationDate != null)
+                { Date = Convert.ToDateTime(Model.ExpirationDate).ToString("d"); }
+                else { Date = ""; } }
+            @Date
+        </dd>
+
+        <dt style="width:180px;">
+            Приоритет
+        </dt>
+
+        <dd>
+            &nbsp; @Html.DisplayFor(model => model.Priority)
+        </dd>
+
+        <dt style="width:180px;">
+            Руководитель проекта
+        </dt>
+
+        <dd>
+            &nbsp; @Html.DisplayFor(model => model.EMPLOYEE.SurName)&nbsp;@Html.DisplayFor(model => model.EMPLOYEE.FirstName)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Назад", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SibProject.Models.TASK>
+
+@{
+    ViewBag.Title = "Задачи";
+}
+
+<h2>Задачи</h2>
+@*поиск по названию и приоритету*@
+<form asp-controller="Tasks" asp-action="Index">
+    <table>
+        <tr>
+            <td><p>Название задачи</p></td>
+            <td><p><input type="text" class="form-control" name="SearchString" value="@ViewBag.FltrName"></p></td>
+        </tr>
+        <tr>
+            <td><p>Приоритет задачи</p></td>
+            <td>
+                <p>@Html.DropDownList("PrioritySearch", ViewBag.FltrPriority as SelectList, htmlAttributes: new { @class = "form-control" })</p>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><p><input type="submit" value="Искать" class="btn btn-default" /></p></td>
+        </tr>
+    </table>
+</form>
+
+<p>
+    @Html.ActionLink("Новая задача", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Задача
+        </th>
+        <th>
+            Приоритет задачи
+        </th>
+        <th>
+            Комментарий
+        </th>
+        <th>
+            Автор
+        </th>
+        <th>
+            Исполнитель
+        </th>
+        <th>
+            Проект
+        </th>
+        <th>
+            Статус задачи
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EMPLOYEE.SurName)&nbsp;@Html.DisplayFor(modelItem => item.EMPLOYEE.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EMPLOYEE1.SurName)&nbsp;@Html.DisplayFor(modelItem => item.EMPLOYEE1.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PROJECT.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STATUS.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>

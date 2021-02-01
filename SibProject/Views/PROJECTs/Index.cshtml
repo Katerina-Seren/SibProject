@@ -1,0 +1,90 @@
+﻿@model IEnumerable<SibProject.Models.PROJECT>
+
+@{
+    ViewBag.Title = "Проекты";
+}
+
+<h2>Проекты</h2>
+@*поиск по названию:*@ 
+<form asp-controller="Projects" asp-action="Index"> 
+    <p>
+        Название проекта: <input type="text" class="form-control" name="SearchString" value="@ViewBag.Fltr">
+    </p>
+    <p>
+        <input type="submit" value="Искать" class="btn btn-default" />
+    </p>
+</form>
+<p>
+    @Html.ActionLink("Создать проект", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Название
+        </th>
+        <th>
+            Компания-заказчик
+        </th>
+        <th>
+            Компания-исполнитель
+        </th>
+        <th>
+            Дата начала
+        </th>
+        <th>
+            Дата окончания
+        </th>
+        <th>
+            Приоритет
+        </th>
+        <th>
+            Руководитель проекта
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Executor)
+        </td>
+        <td>
+            @*форматируем дату:*@
+            @{ string Date = ""; }
+            @{ if (item.StartDate != null)
+                { Date = Convert.ToDateTime(item.StartDate).ToString("d"); }
+                else { Date = ""; } }
+            @Date
+        </td>
+        <td>
+            @*форматируем дату:*@
+ 
+            @{ if (item.ExpirationDate != null)
+                { Date = Convert.ToDateTime(item.ExpirationDate).ToString("d"); }
+                else { Date = ""; } }
+            @Date
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Priority)
+        </td>
+        <td>
+            @*выводим имя и фамилию*@
+            @Html.DisplayFor(modelItem => item.EMPLOYEE.SurName)&nbsp;@Html.DisplayFor(modelItem => item.EMPLOYEE.FirstName)
+        </td>
+
+        <td>
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.ID }) <br>
+            @Html.ActionLink("Подробно", "Details", new { id=item.ID }) <br>
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
+

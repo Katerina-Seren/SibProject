@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SibProject.Models.EMPLOYEE>
+
+@{
+    ViewBag.Title = "Работники";
+}
+
+<h2>Работники</h2>
+@*поиск по фамилии:*@
+<form asp-controller="Employee" asp-action="Index">
+    <p>
+        Фамилия работника: <input type="text" class="form-control" name="SearchString" value="@ViewBag.Fltr">
+    </p>
+    <p>
+        <input type="submit" value="Искать" class="btn btn-default" />
+    </p>
+</form>
+<p>
+    @Html.ActionLink("Новый", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Фамилия
+        </th>
+        <th>
+            Имя
+        </th>
+        <th>
+            Отчетсво
+        </th>
+        <th>
+            E-mail
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SurName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patronymic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
